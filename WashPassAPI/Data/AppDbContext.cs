@@ -13,6 +13,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<CarWashStation> CarWashStations { get; set; } = null!;
     public DbSet<StationImage> StationImages { get; set; } = null!;
     public DbSet<Service> Services { get; set; } = null!;
+    public DbSet<Booking> Bookings { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,5 +42,31 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         .WithMany(station => station.Services) // Add a `List<Service>` to CarWashStation if needed
         .HasForeignKey(s => s.CarWashStationId)
         .OnDelete(DeleteBehavior.Cascade);
+
+
+        modelBuilder.Entity<Booking>()
+        .HasOne(b => b.User)
+        .WithMany(u => u.Bookings) // Add List<Booking> Bookings to AppUser if needed
+        .HasForeignKey(b => b.UserId);
+
+        modelBuilder.Entity<Booking>()
+        .HasOne(b => b.Station)
+        .WithMany(s => s.Bookings) // or .WithMany(s => s.Bookings)
+        .HasForeignKey(b => b.CarWashStationId);
+
+        modelBuilder.Entity<Booking>()
+        .HasOne(b => b.Vehicle)
+        .WithMany(v => v.Bookings)
+        .HasForeignKey(b => b.VehicleId);
+
+        modelBuilder.Entity<BookingService>()
+        .HasOne(bs => bs.Booking)
+        .WithMany(b => b.BookingServices)
+        .HasForeignKey(bs => bs.BookingId);
+
+        modelBuilder.Entity<BookingService>()
+        .HasOne(bs => bs.Service)
+        .WithMany(s => s.BookingServices)
+        .HasForeignKey(bs => bs.ServiceId);
     }
 }

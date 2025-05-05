@@ -28,5 +28,5 @@ public class CarWashStation
 
     public List<StationImage> Images { get; set; } = [];
     public List<Service> Services { get; set; } = [];
-
+    public List<Booking> Bookings { get; set; } = [];
 }

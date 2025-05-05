@@ -10,4 +10,5 @@ public class AppUser
     public DateTimeOffset CreatedAt { get; set; }
 
     public List<Vehicle> Vehicles { get; set; } = [];
+    public List<Booking> Bookings { get; set; } = [];
 }

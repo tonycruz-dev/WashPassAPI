@@ -24,5 +24,6 @@ public class Service
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow.ToLocalTime();
 
-    public CarWashStation? Station { get; set; } = null!;
+    public CarWashStation? Station { get; set; } 
+    public List<BookingService> BookingServices { get; set; } = [];
 }

@@ -18,4 +18,5 @@ public class Vehicle
 
     // Optional: Navigation property if using Entity Framework
      public AppUser? AppUser { get; set; }
+    public List<Booking> Bookings { get; set; } = [];
 }
