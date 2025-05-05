@@ -27,4 +27,6 @@ public class CarWashStation
     public AdminUser? AdminUser { get; set; } 
 
     public List<StationImage> Images { get; set; } = [];
+    public List<Service> Services { get; set; } = [];
+
 }

@@ -12,6 +12,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<Vehicle> Vehicles { get; set; } = null!;
     public DbSet<CarWashStation> CarWashStations { get; set; } = null!;
     public DbSet<StationImage> StationImages { get; set; } = null!;
+    public DbSet<Service> Services { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,5 +35,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
        .WithMany(s => s.Images)
        .HasForeignKey(i => i.StationId)
        .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Service>()
+        .HasOne(s => s.Station)
+        .WithMany(station => station.Services) // Add a `List<Service>` to CarWashStation if needed
+        .HasForeignKey(s => s.CarWashStationId)
+        .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -21,3 +21,17 @@ public class VehiclesOdataController(AppDbContext context)
     }
 }
 
+[Route("odata/Services")]
+[Tags("Services")]
+[ApiController]
+[ODataAttributeRouting]
+public class ServicesOdataController(AppDbContext context)
+{
+    [HttpGet]
+    [EnableQuery(PageSize = 100)]
+    public IQueryable<Service> Get()
+    {
+        return context.Services.AsNoTracking();
+    }
+}
+

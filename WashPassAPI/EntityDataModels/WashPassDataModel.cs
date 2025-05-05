@@ -17,6 +17,7 @@ public class WashPassDataModel
         builder.EntitySet<Vehicle>("Vehicles");
         builder.EntitySet<CarWashStation>("CarWashStations");
         builder.EntitySet<StationImage>("StationImages");
+        builder.EntitySet<Service>("Services");
         builder.EnableLowerCamelCase(NameResolverOptions.ProcessReflectedPropertyNames);
         return builder.GetEdmModel();
     }

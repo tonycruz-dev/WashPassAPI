@@ -15,7 +15,7 @@ public class StationImagesController(AppDbContext context) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<StationImage>> Create(StationImage image)
     {
-        image.CreatedAt = DateTimeOffset.UtcNow;
+        image.CreatedAt = DateTimeOffset.UtcNow.ToLocalTime();
         _context.StationImages.Add(image);
         await _context.SaveChangesAsync();
 
