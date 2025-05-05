@@ -10,6 +10,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<AdminUser> AdminUsers { get; set; } = null!;
     public DbSet<AppUser> AppUsers { get; set; } = null!;
     public DbSet<Vehicle> Vehicles { get; set; } = null!;
+    public DbSet<CarWashStation> CarWashStations { get; set; } = null!;
+    public DbSet<StationImage> StationImages { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -19,6 +21,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
        .HasOne(v => v.AppUser)
        .WithMany(u => u.Vehicles)
        .HasForeignKey(v => v.AppUserId)
+       .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<CarWashStation>()
+       .HasOne(s => s.AdminUser)
+       .WithMany()
+       .HasForeignKey(s => s.AdminId)
+       .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<StationImage>()
+       .HasOne(i => i.Station)
+       .WithMany(s => s.Images)
+       .HasForeignKey(i => i.StationId)
        .OnDelete(DeleteBehavior.Cascade);
     }
 }

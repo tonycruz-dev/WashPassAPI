@@ -7,19 +7,17 @@ using WashPassAPI.Models;
 
 namespace WashPassAPI.OdataControllers;
 
-
-
-[Route("odata/AppUsers")]
-[Tags("AppUsers")]
+[Route("odata/Vehicles")]
+[Tags("Vehicles")]
 [ApiController]
 [ODataAttributeRouting]
-public class AppUsersOdataController(AppDbContext context)
+public class VehiclesOdataController(AppDbContext context)
 {
     [HttpGet]
     [EnableQuery(PageSize = 100)]
-    public IQueryable<AppUser> Get()
+    public IQueryable<Vehicle> Get()
     {
-        return context.AppUsers.AsNoTracking();
+        return context.Vehicles.AsNoTracking();
     }
 }
 
