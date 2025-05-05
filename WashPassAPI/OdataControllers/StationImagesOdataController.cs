@@ -7,16 +7,16 @@ using WashPassAPI.Models;
 
 namespace WashPassAPI.OdataControllers;
 
-[Route("odata/CarWashStations")]
-[Tags("CarWashStations")]
+[Route("odata/StationImages")]
+[Tags("StationImages")]
 [ApiController]
 [ODataAttributeRouting]
-public class CarWashStationsOdataController(AppDbContext context)
+public class StationImagesOdataController(AppDbContext context)
 {
     [HttpGet]
     [EnableQuery(PageSize = 100)]
-    public IQueryable<CarWashStation> Get()
+    public IQueryable<StationImage> Get()
     {
-        return context.CarWashStations.AsNoTracking();
+        return context.StationImages.AsNoTracking();
     }
 }

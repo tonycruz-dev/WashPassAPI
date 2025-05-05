@@ -10,5 +10,5 @@ public class StationImage
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow.ToLocalTime();
 
-    public CarWashStation Station { get; set; } = null!;
+    public CarWashStation? Station { get; set; } = null!;
 }

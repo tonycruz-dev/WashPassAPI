@@ -26,7 +26,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         modelBuilder.Entity<CarWashStation>()
        .HasOne(s => s.AdminUser)
        .WithMany()
-       .HasForeignKey(s => s.AdminId)
+       .HasForeignKey(s => s.AdminUserId)
        .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<StationImage>()
