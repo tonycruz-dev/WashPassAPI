@@ -22,3 +22,19 @@ public class AppUsersOdataController(AppDbContext context)
         return context.AppUsers.AsNoTracking();
     }
 }
+
+
+[Route("odata/Vehicles")]
+[Tags("Vehicles")]
+[ApiController]
+[ODataAttributeRouting]
+public class VehiclesOdataController(AppDbContext context)
+{
+    [HttpGet]
+    [EnableQuery(PageSize = 100)]
+    public IQueryable<Vehicle> Get()
+    {
+        return context.Vehicles.AsNoTracking();
+    }
+}
+

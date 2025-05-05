@@ -8,4 +8,6 @@ public class AppUser
     public string? Location { get; }
     public required Guid UserId { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
+
+    public List<Vehicle> Vehicles { get; set; } = [];
 }
