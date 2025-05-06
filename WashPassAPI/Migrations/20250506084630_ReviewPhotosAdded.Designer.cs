@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WashPassAPI.Data;
 
@@ -11,9 +12,11 @@ using WashPassAPI.Data;
 namespace WashPassAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506084630_ReviewPhotosAdded")]
+    partial class ReviewPhotosAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -442,38 +445,6 @@ namespace WashPassAPI.Migrations
                     b.ToTable("StationImages");
                 });
 
-            modelBuilder.Entity("WashPassAPI.Models.Subscription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("MonthlyFee")
-                        .HasColumnType("money");
-
-                    b.Property<DateTime>("NextPaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PlanName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId")
-                        .IsUnique();
-
-                    b.ToTable("Subscriptions");
-                });
-
             modelBuilder.Entity("WashPassAPI.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -741,17 +712,6 @@ namespace WashPassAPI.Migrations
                     b.Navigation("Station");
                 });
 
-            modelBuilder.Entity("WashPassAPI.Models.Subscription", b =>
-                {
-                    b.HasOne("WashPassAPI.Models.AppUser", "User")
-                        .WithOne("Subscription")
-                        .HasForeignKey("WashPassAPI.Models.Subscription", "AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("WashPassAPI.Models.Vehicle", b =>
                 {
                     b.HasOne("WashPassAPI.Models.AppUser", "AppUser")
@@ -771,8 +731,6 @@ namespace WashPassAPI.Migrations
             modelBuilder.Entity("WashPassAPI.Models.AppUser", b =>
                 {
                     b.Navigation("Bookings");
-
-                    b.Navigation("Subscription");
 
                     b.Navigation("Vehicles");
                 });

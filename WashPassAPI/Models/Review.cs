@@ -13,4 +13,5 @@ public class Review
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow.ToLocalTime();
 
     public Booking Booking { get; set; } = null!;
+    public List<ReviewPhoto> Photos { get; set; } = [];
 }

@@ -21,6 +21,8 @@ public class WashPassDataModel
         builder.EntitySet<Booking>("Bookings");
         //builder.EntitySet<BookingService>("BookingServices");
         builder.EntitySet<Review>("Reviews");
+        builder.EntitySet<ReviewPhoto>("ReviewPhotos");
+        builder.EntitySet<Subscription>("Subscriptions");
         builder.EnableLowerCamelCase(NameResolverOptions.ProcessReflectedPropertyNames);
         return builder.GetEdmModel();
     }

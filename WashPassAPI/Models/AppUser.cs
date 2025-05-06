@@ -9,6 +9,7 @@ public class AppUser
     public required Guid UserId { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
 
+    public Subscription? Subscription { get; set; }
     public List<Vehicle> Vehicles { get; set; } = [];
     public List<Booking> Bookings { get; set; } = [];
 }

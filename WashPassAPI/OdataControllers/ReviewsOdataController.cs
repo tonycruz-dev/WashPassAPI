@@ -20,3 +20,17 @@ public class ReviewsOdataController(AppDbContext context)
         return context.Reviews.AsNoTracking();
     }
 }
+
+[Route("odata/ReviewPhotos")]
+[Tags("ReviewPhotos")]
+[ApiController]
+[ODataAttributeRouting]
+public class ReviewPhotosOdataController(AppDbContext context)
+{
+    [HttpGet]
+    [EnableQuery(PageSize = 100)]
+    public IQueryable<ReviewPhoto> Get()
+    {
+        return context.ReviewPhotos.AsNoTracking();
+    }
+}
