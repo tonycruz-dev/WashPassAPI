@@ -14,6 +14,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<StationImage> StationImages { get; set; } = null!;
     public DbSet<Service> Services { get; set; } = null!;
     public DbSet<Booking> Bookings { get; set; } = null!;
+    public DbSet<BookingService> BookingServices { get; set; } = null!;
+    public DbSet<Review> Reviews { get; set; } = null!;
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -60,6 +63,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .WithMany(s => s.Bookings)
             .HasForeignKey(b => b.CarWashStationId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Booking>()
+        .HasOne(b => b.Review)
+        .WithOne(r => r.Booking)
+        .HasForeignKey<Review>(r => r.BookingId)
+        .OnDelete(DeleteBehavior.Cascade);
 
         // Booking - Vehicle
         modelBuilder.Entity<Booking>()

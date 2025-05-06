@@ -25,5 +25,6 @@ public class Booking
     public AppUser? User { get; set; } 
     public CarWashStation? Station { get; set; }
     public Vehicle? Vehicle { get; set; }
+    public Review? Review { get; set; }
     public ICollection<BookingService> BookingServices { get; set; } = [];
 }
