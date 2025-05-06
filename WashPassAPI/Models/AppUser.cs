@@ -12,4 +12,5 @@ public class AppUser
     public Subscription? Subscription { get; set; }
     public List<Vehicle> Vehicles { get; set; } = [];
     public List<Booking> Bookings { get; set; } = [];
+    public List<Token> Tokens { get; set; } = [];
 }

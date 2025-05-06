@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WashPassAPI.Data;
 
@@ -11,9 +12,11 @@ using WashPassAPI.Data;
 namespace WashPassAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250506091632_TokensAdded")]
+    partial class TokensAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,37 +260,6 @@ namespace WashPassAPI.Migrations
                     b.HasIndex("VehicleId");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("WashPassAPI.Models.BookingCommission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("CommissionAmount")
-                        .HasColumnType("money");
-
-                    b.Property<decimal>("CommissionPercent")
-                        .HasColumnType("money");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("PaidToAdmin")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookingId")
-                        .IsUnique();
-
-                    b.ToTable("BookingCommissions");
                 });
 
             modelBuilder.Entity("WashPassAPI.Models.BookingService", b =>
@@ -726,17 +698,6 @@ namespace WashPassAPI.Migrations
                     b.Navigation("Vehicle");
                 });
 
-            modelBuilder.Entity("WashPassAPI.Models.BookingCommission", b =>
-                {
-                    b.HasOne("WashPassAPI.Models.Booking", "Booking")
-                        .WithOne("Commission")
-                        .HasForeignKey("WashPassAPI.Models.BookingCommission", "BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Booking");
-                });
-
             modelBuilder.Entity("WashPassAPI.Models.BookingService", b =>
                 {
                     b.HasOne("WashPassAPI.Models.Booking", "Booking")
@@ -863,8 +824,6 @@ namespace WashPassAPI.Migrations
             modelBuilder.Entity("WashPassAPI.Models.Booking", b =>
                 {
                     b.Navigation("BookingServices");
-
-                    b.Navigation("Commission");
 
                     b.Navigation("Review");
                 });

@@ -18,6 +18,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<Review> Reviews { get; set; } = null!;
     public DbSet<ReviewPhoto> ReviewPhotos { get; set; } = null!;
     public DbSet<Subscription> Subscriptions { get; set; } = null!;
+    public DbSet<Token> Tokens { get; set; } = null!;
+    public DbSet<BookingCommission> BookingCommissions { get; set; } = null!;
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -79,6 +81,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .HasForeignKey(b => b.VehicleId)
             .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete if vehicle is deleted
 
+        modelBuilder.Entity<Booking>()
+            .HasOne(b => b.Commission)
+            .WithOne(c => c.Booking)
+            .HasForeignKey<BookingCommission>(c => c.BookingId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<BookingService>(x => x.HasKey(bs => new { bs.BookingId, bs.ServiceId }));
         
         //// BookingService (Many-to-Many)
@@ -105,6 +113,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .HasOne(s => s.User)
             .WithOne(u => u.Subscription)
             .HasForeignKey<Subscription>(s => s.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Token>()
+            .HasOne(t => t.User)
+            .WithMany(u => u.Tokens)
+            .HasForeignKey(t => t.AppUserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
