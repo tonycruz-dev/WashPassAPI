@@ -56,7 +56,7 @@ public class CarWashStationsController(AppDbContext context) : ControllerBase
         existing.ClosingTime = updatedStation.ClosingTime;
         existing.Description = updatedStation.Description;
         existing.PhoneNumber = updatedStation.PhoneNumber;
-        existing.AdminUserId = updatedStation.AdminUserId;
+        existing.AdminId = updatedStation.AdminId;
 
         await _context.SaveChangesAsync();
         return NoContent();

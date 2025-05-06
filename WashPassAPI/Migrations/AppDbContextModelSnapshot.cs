@@ -155,7 +155,7 @@ namespace WashPassAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WashPassAPI.Models.AdminUser", b =>
+            modelBuilder.Entity("WashPassAPI.Models.AdminAccount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -182,7 +182,7 @@ namespace WashPassAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AdminUsers");
+                    b.ToTable("AdminAccounts");
                 });
 
             modelBuilder.Entity("WashPassAPI.Models.AppUser", b =>
@@ -261,21 +261,13 @@ namespace WashPassAPI.Migrations
 
             modelBuilder.Entity("WashPassAPI.Models.BookingService", b =>
                 {
-                    b.Property<int>("BookingServiceId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingServiceId"));
-
                     b.Property<int>("BookingId")
                         .HasColumnType("int");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");
 
-                    b.HasKey("BookingServiceId");
-
-                    b.HasIndex("BookingId");
+                    b.HasKey("BookingId", "ServiceId");
 
                     b.HasIndex("ServiceId");
 
@@ -294,10 +286,7 @@ namespace WashPassAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("AdminUserId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AdminUserId1")
+                    b.Property<int>("AdminId")
                         .HasColumnType("int");
 
                     b.Property<string>("ClosingTime")
@@ -331,9 +320,7 @@ namespace WashPassAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdminUserId");
-
-                    b.HasIndex("AdminUserId1");
+                    b.HasIndex("AdminId");
 
                     b.ToTable("CarWashStations");
                 });
@@ -587,7 +574,7 @@ namespace WashPassAPI.Migrations
                     b.HasOne("WashPassAPI.Models.Vehicle", "Vehicle")
                         .WithMany("Bookings")
                         .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Station");
@@ -602,13 +589,13 @@ namespace WashPassAPI.Migrations
                     b.HasOne("WashPassAPI.Models.Booking", "Booking")
                         .WithMany("BookingServices")
                         .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("WashPassAPI.Models.Service", "Service")
                         .WithMany("BookingServices")
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Booking");
@@ -618,17 +605,13 @@ namespace WashPassAPI.Migrations
 
             modelBuilder.Entity("WashPassAPI.Models.CarWashStation", b =>
                 {
-                    b.HasOne("WashPassAPI.Models.AdminUser", "AdminUser")
-                        .WithMany()
-                        .HasForeignKey("AdminUserId")
+                    b.HasOne("WashPassAPI.Models.AdminAccount", "AdminAccount")
+                        .WithMany("CarWashStations")
+                        .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WashPassAPI.Models.AdminUser", null)
-                        .WithMany("CarWashStations")
-                        .HasForeignKey("AdminUserId1");
-
-                    b.Navigation("AdminUser");
+                    b.Navigation("AdminAccount");
                 });
 
             modelBuilder.Entity("WashPassAPI.Models.Service", b =>
@@ -664,7 +647,7 @@ namespace WashPassAPI.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("WashPassAPI.Models.AdminUser", b =>
+            modelBuilder.Entity("WashPassAPI.Models.AdminAccount", b =>
                 {
                     b.Navigation("CarWashStations");
                 });

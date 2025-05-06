@@ -7,16 +7,16 @@ using WashPassAPI.Models;
 
 namespace WashPassAPI.OdataControllers;
 
-[Route("odata/AdminUsers")]
-[Tags("AdminUsers")]
+[Route("odata/Bookings")]
+[Tags("Bookings")]
 [ApiController]
 [ODataAttributeRouting]
-public class AdminUsersOdataController(AppDbContext context)
+public class BookingsOdataController(AppDbContext context)
 {
     [HttpGet]
     [EnableQuery(PageSize = 100)]
-    public IQueryable<AdminAccount> Get()
+    public IQueryable<Booking> Get()
     {
-        return context.AdminAccounts.AsNoTracking();
+        return context.Bookings.AsNoTracking();
     }
 }

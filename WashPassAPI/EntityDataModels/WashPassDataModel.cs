@@ -13,11 +13,13 @@ public class WashPassDataModel
             ContainerName = "WashPassContainer"
         };
         builder.EntitySet<AppUser>("AppUsers");
-        builder.EntitySet<AdminUser>("AdminUsers");
+        builder.EntitySet<AdminAccount>("AdminUsers");
         builder.EntitySet<Vehicle>("Vehicles");
         builder.EntitySet<CarWashStation>("CarWashStations");
         builder.EntitySet<StationImage>("StationImages");
         builder.EntitySet<Service>("Services");
+        builder.EntitySet<Booking>("Bookings");
+        //builder.EntitySet<BookingService>("BookingServices");
         builder.EnableLowerCamelCase(NameResolverOptions.ProcessReflectedPropertyNames);
         return builder.GetEdmModel();
     }

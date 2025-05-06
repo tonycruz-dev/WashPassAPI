@@ -1,6 +1,6 @@
 ﻿namespace WashPassAPI.Models;
 
-public class AdminUser
+public class AdminAccount
 {
     public int Id { get; set; }
 

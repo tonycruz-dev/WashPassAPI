@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WashPassAPI.Models;
 
@@ -25,5 +26,5 @@ public class Service
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow.ToLocalTime();
 
     public CarWashStation? Station { get; set; } 
-    public List<BookingService> BookingServices { get; set; } = [];
+    public ICollection<BookingService> BookingServices { get; set; } = [];
 }

@@ -34,4 +34,3 @@ public class ServicesOdataController(AppDbContext context)
         return context.Services.AsNoTracking();
     }
 }
-

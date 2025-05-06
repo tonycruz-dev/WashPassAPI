@@ -12,8 +12,8 @@ using WashPassAPI.Data;
 namespace WashPassAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250505100433_CarWashStationsAdded")]
-    partial class CarWashStationsAdded
+    [Migration("20250506081112_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -158,7 +158,7 @@ namespace WashPassAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WashPassAPI.Models.AdminUser", b =>
+            modelBuilder.Entity("WashPassAPI.Models.AdminAccount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,7 +185,7 @@ namespace WashPassAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AdminUsers");
+                    b.ToTable("AdminAccounts");
                 });
 
             modelBuilder.Entity("WashPassAPI.Models.AppUser", b =>
@@ -215,6 +215,68 @@ namespace WashPassAPI.Migrations
                     b.ToTable("AppUsers");
                 });
 
+            modelBuilder.Entity("WashPassAPI.Models.Booking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<TimeSpan>("ArrivalTimeEnd")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("ArrivalTimeStart")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("CarWashStationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("money");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarWashStationId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("WashPassAPI.Models.BookingService", b =>
+                {
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BookingId", "ServiceId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("BookingService");
+                });
+
             modelBuilder.Entity("WashPassAPI.Models.CarWashStation", b =>
                 {
                     b.Property<int>("Id")
@@ -228,9 +290,6 @@ namespace WashPassAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AdminId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("AdminUserId")
                         .HasColumnType("int");
 
                     b.Property<string>("ClosingTime")
@@ -266,9 +325,48 @@ namespace WashPassAPI.Migrations
 
                     b.HasIndex("AdminId");
 
-                    b.HasIndex("AdminUserId");
-
                     b.ToTable("CarWashStations");
+                });
+
+            modelBuilder.Entity("WashPassAPI.Models.Service", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarWashStationId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("CommissionPercent")
+                        .HasColumnType("money");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DurationMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("money");
+
+                    b.Property<string>("ServiceType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TokenValue")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarWashStationId");
+
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("WashPassAPI.Models.StationImage", b =>
@@ -462,19 +560,72 @@ namespace WashPassAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WashPassAPI.Models.Booking", b =>
+                {
+                    b.HasOne("WashPassAPI.Models.CarWashStation", "Station")
+                        .WithMany("Bookings")
+                        .HasForeignKey("CarWashStationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WashPassAPI.Models.AppUser", "User")
+                        .WithMany("Bookings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WashPassAPI.Models.Vehicle", "Vehicle")
+                        .WithMany("Bookings")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Station");
+
+                    b.Navigation("User");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("WashPassAPI.Models.BookingService", b =>
+                {
+                    b.HasOne("WashPassAPI.Models.Booking", "Booking")
+                        .WithMany("BookingServices")
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("WashPassAPI.Models.Service", "Service")
+                        .WithMany("BookingServices")
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("WashPassAPI.Models.CarWashStation", b =>
                 {
-                    b.HasOne("WashPassAPI.Models.AdminUser", "AdminUser")
-                        .WithMany()
+                    b.HasOne("WashPassAPI.Models.AdminAccount", "AdminAccount")
+                        .WithMany("CarWashStations")
                         .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WashPassAPI.Models.AdminUser", null)
-                        .WithMany("CarWashStations")
-                        .HasForeignKey("AdminUserId");
+                    b.Navigation("AdminAccount");
+                });
 
-                    b.Navigation("AdminUser");
+            modelBuilder.Entity("WashPassAPI.Models.Service", b =>
+                {
+                    b.HasOne("WashPassAPI.Models.CarWashStation", "Station")
+                        .WithMany("Services")
+                        .HasForeignKey("CarWashStationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Station");
                 });
 
             modelBuilder.Entity("WashPassAPI.Models.StationImage", b =>
@@ -499,19 +650,40 @@ namespace WashPassAPI.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("WashPassAPI.Models.AdminUser", b =>
+            modelBuilder.Entity("WashPassAPI.Models.AdminAccount", b =>
                 {
                     b.Navigation("CarWashStations");
                 });
 
             modelBuilder.Entity("WashPassAPI.Models.AppUser", b =>
                 {
+                    b.Navigation("Bookings");
+
                     b.Navigation("Vehicles");
+                });
+
+            modelBuilder.Entity("WashPassAPI.Models.Booking", b =>
+                {
+                    b.Navigation("BookingServices");
                 });
 
             modelBuilder.Entity("WashPassAPI.Models.CarWashStation", b =>
                 {
+                    b.Navigation("Bookings");
+
                     b.Navigation("Images");
+
+                    b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("WashPassAPI.Models.Service", b =>
+                {
+                    b.Navigation("BookingServices");
+                });
+
+            modelBuilder.Entity("WashPassAPI.Models.Vehicle", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,7 +4,7 @@ public class CarWashStation
 {
     public int Id { get; set; }
 
-    public required int AdminUserId { get; set; }
+    public  int AdminId { get; set; }
 
     public string Name { get; set; } = string.Empty;
 
@@ -24,7 +24,7 @@ public class CarWashStation
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow.ToLocalTime();
 
-    public AdminUser? AdminUser { get; set; } 
+    public AdminAccount? AdminAccount { get; set; } 
 
     public List<StationImage> Images { get; set; } = [];
     public List<Service> Services { get; set; } = [];

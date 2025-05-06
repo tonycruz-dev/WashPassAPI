@@ -73,14 +73,14 @@ public class AccountController(SignInManager<User> signInManager, IEmailSender<U
         {
             // get the user
             var userId = Guid.Parse(await signInManager.UserManager.GetUserIdAsync(user));
-            var appuser = new AdminUser
+            var appuser = new AdminAccount
             {
                 FullName = registerDto.DisplayName,
                 Email = registerDto.Email,
                 UserId = userId,
                 CreatedAt = DateTime.UtcNow.ToLocalTime()
             };
-            dbContext.AdminUsers.Add(appuser);
+            dbContext.AdminAccounts.Add(appuser);
             await dbContext.SaveChangesAsync();
 
             return Ok();

@@ -7,7 +7,7 @@ namespace WashPassAPI.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<User>(options)
 {
 
-    public DbSet<AdminUser> AdminUsers { get; set; } = null!;
+    public DbSet<AdminAccount> AdminAccounts { get; set; } = null!;
     public DbSet<AppUser> AppUsers { get; set; } = null!;
     public DbSet<Vehicle> Vehicles { get; set; } = null!;
     public DbSet<CarWashStation> CarWashStations { get; set; } = null!;
@@ -19,54 +19,69 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     {
         base.OnModelCreating(modelBuilder);
         // Add any custom model configurations here
+        // Vehicle - AppUser (One-to-Many)
         modelBuilder.Entity<Vehicle>()
-       .HasOne(v => v.AppUser)
-       .WithMany(u => u.Vehicles)
-       .HasForeignKey(v => v.AppUserId)
-       .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(v => v.AppUser)
+            .WithMany(u => u.Vehicles)
+            .HasForeignKey(v => v.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        // CarWashStation - AdminUser (One-to-Many or One-to-One depending on design)
         modelBuilder.Entity<CarWashStation>()
-       .HasOne(s => s.AdminUser)
-       .WithMany()
-       .HasForeignKey(s => s.AdminUserId)
-       .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(s => s.AdminAccount)
+            .WithMany(a => a.CarWashStations) 
+            .HasForeignKey(s => s.AdminId)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        // StationImage - CarWashStation (One-to-Many)
         modelBuilder.Entity<StationImage>()
-       .HasOne(i => i.Station)
-       .WithMany(s => s.Images)
-       .HasForeignKey(i => i.StationId)
-       .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(i => i.Station)
+            .WithMany(s => s.Images)
+            .HasForeignKey(i => i.StationId)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        // Service - CarWashStation (One-to-Many)
         modelBuilder.Entity<Service>()
-        .HasOne(s => s.Station)
-        .WithMany(station => station.Services) // Add a `List<Service>` to CarWashStation if needed
-        .HasForeignKey(s => s.CarWashStationId)
-        .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(s => s.Station)
+            .WithMany(st => st.Services)
+            .HasForeignKey(s => s.CarWashStationId)
+            .OnDelete(DeleteBehavior.Cascade);
 
-
+        // Booking - User
         modelBuilder.Entity<Booking>()
-        .HasOne(b => b.User)
-        .WithMany(u => u.Bookings) // Add List<Booking> Bookings to AppUser if needed
-        .HasForeignKey(b => b.UserId);
+            .HasOne(b => b.User)
+            .WithMany(u => u.Bookings)
+            .HasForeignKey(b => b.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        // Booking - Station
         modelBuilder.Entity<Booking>()
-        .HasOne(b => b.Station)
-        .WithMany(s => s.Bookings) // or .WithMany(s => s.Bookings)
-        .HasForeignKey(b => b.CarWashStationId);
+            .HasOne(b => b.Station)
+            .WithMany(s => s.Bookings)
+            .HasForeignKey(b => b.CarWashStationId)
+            .OnDelete(DeleteBehavior.Cascade);
 
+        // Booking - Vehicle
         modelBuilder.Entity<Booking>()
-        .HasOne(b => b.Vehicle)
-        .WithMany(v => v.Bookings)
-        .HasForeignKey(b => b.VehicleId);
+            .HasOne(b => b.Vehicle)
+            .WithMany(v => v.Bookings)
+            .HasForeignKey(b => b.VehicleId)
+            .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete if vehicle is deleted
+
+        modelBuilder.Entity<BookingService>(x => x.HasKey(bs => new { bs.BookingId, bs.ServiceId }));
+        
+        //// BookingService (Many-to-Many)
+        modelBuilder.Entity<BookingService>()
+            .HasOne(bs => bs.Booking)
+            .WithMany(b => b.BookingServices)
+            .HasForeignKey(bs => bs.BookingId)
+            .OnDelete(DeleteBehavior.NoAction);
+
 
         modelBuilder.Entity<BookingService>()
-        .HasOne(bs => bs.Booking)
-        .WithMany(b => b.BookingServices)
-        .HasForeignKey(bs => bs.BookingId);
-
-        modelBuilder.Entity<BookingService>()
-        .HasOne(bs => bs.Service)
-        .WithMany(s => s.BookingServices)
-        .HasForeignKey(bs => bs.ServiceId);
+            .HasOne(bs => bs.Service)
+            .WithMany(s => s.BookingServices)
+            .HasForeignKey(bs => bs.ServiceId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
