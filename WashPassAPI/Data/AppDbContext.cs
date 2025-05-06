@@ -20,6 +20,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<Subscription> Subscriptions { get; set; } = null!;
     public DbSet<Token> Tokens { get; set; } = null!;
     public DbSet<BookingCommission> BookingCommissions { get; set; } = null!;
+    public DbSet<ActivityLog> ActivityLogs { get; set; } = null!;
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -119,6 +120,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .HasOne(t => t.User)
             .WithMany(u => u.Tokens)
             .HasForeignKey(t => t.AppUserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ActivityLog>()
+            .HasOne(log => log.AdminAccount)
+            .WithMany(admin => admin.ActivityLogs)
+            .HasForeignKey(log => log.AdminId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

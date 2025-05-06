@@ -155,6 +155,35 @@ namespace WashPassAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WashPassAPI.Models.ActivityLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ActionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AdminId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.ToTable("ActivityLogs");
+                });
+
             modelBuilder.Entity("WashPassAPI.Models.AdminAccount", b =>
                 {
                     b.Property<int>("Id")
@@ -172,6 +201,9 @@ namespace WashPassAPI.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role")
@@ -202,6 +234,9 @@ namespace WashPassAPI.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -699,6 +734,17 @@ namespace WashPassAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WashPassAPI.Models.ActivityLog", b =>
+                {
+                    b.HasOne("WashPassAPI.Models.AdminAccount", "AdminAccount")
+                        .WithMany("ActivityLogs")
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AdminAccount");
+                });
+
             modelBuilder.Entity("WashPassAPI.Models.Booking", b =>
                 {
                     b.HasOne("WashPassAPI.Models.CarWashStation", "Station")
@@ -846,6 +892,8 @@ namespace WashPassAPI.Migrations
 
             modelBuilder.Entity("WashPassAPI.Models.AdminAccount", b =>
                 {
+                    b.Navigation("ActivityLogs");
+
                     b.Navigation("CarWashStations");
                 });
 

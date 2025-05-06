@@ -1,0 +1,391 @@
+﻿{
+  "Washpass": {
+    "AdminAccounts": [
+      {
+        "Id": 1,
+        "FullName": "Alice Johnson",
+        "Email": "alice@washmaster.io",
+        "Location": "London",
+        "Role": "SuperAdmin",
+        "UserId": "2d7e4e5e-b967-4b6b-9a71-a2b1ddc9f601",
+        "CreatedAt": "2025-05-01T09:00:00+01:00"
+      },
+      {
+        "Id": 2,
+        "FullName": "Bob Williams",
+        "Email": "bob@cleanshine.uk",
+        "Location": "Manchester",
+        "Role": "Admin",
+        "UserId": "52f28e4b-3a5d-4c2e-8b43-6f0a0f5c2d71",
+        "CreatedAt": "2025-04-15T10:30:00+01:00"
+      }
+    ],
+
+    "CarWashStations": [
+      {
+        "Id": 1,
+        "AdminId": 1,
+        "Name": "Clean Wheels Central",
+        "Address": "12 King Street, London",
+        "Latitude": 51.5136,
+        "Longitude": -0.0983,
+        "OpeningTime": "08:00",
+        "ClosingTime": "20:00",
+        "Description": "Modern automated tunnel with detailing bay.",
+        "PhoneNumber": "+44‑20‑5555‑0101",
+        "CreatedAt": "2025-05-02T08:30:00+01:00"
+      },
+      {
+        "Id": 2,
+        "AdminId": 1,
+        "Name": "Sparkle Car Wash",
+        "Address": "101 Riverside Walk, London",
+        "Latitude": 51.5055,
+        "Longitude": -0.0754,
+        "OpeningTime": "07:30",
+        "ClosingTime": "19:30",
+        "Description": "Hand‑wash specialists by the Thames.",
+        "PhoneNumber": "+44‑20‑5555‑0202",
+        "CreatedAt": "2025-05-03T11:00:00+01:00"
+      },
+      {
+        "Id": 3,
+        "AdminId": 2,
+        "Name": "Bubble Auto Spa",
+        "Address": "55 Oxford Road, Manchester",
+        "Latitude": 53.4721,
+        "Longitude": -2.2381,
+        "OpeningTime": "08:00",
+        "ClosingTime": "21:00",
+        "Description": "High‑pressure bays with café lounge.",
+        "PhoneNumber": "+44‑161‑555‑0303",
+        "CreatedAt": "2025-04-20T09:15:00+01:00"
+      }
+    ],
+
+    "Services": [
+      {
+        "Id": 1,
+        "CarWashStationId": 1,
+        "Name": "Exterior Wash",
+        "DurationMinutes": 30,
+        "TokenValue": 5,
+        "Price": 15.00,
+        "ServiceType": "Wash",
+        "CommissionPercent": 10.0,
+        "CreatedAt": "2025-05-02T08:35:00+01:00"
+      },
+      {
+        "Id": 2,
+        "CarWashStationId": 1,
+        "Name": "Full Valet",
+        "DurationMinutes": 60,
+        "TokenValue": 10,
+        "Price": 30.00,
+        "ServiceType": "Valet",
+        "CommissionPercent": 12.5,
+        "CreatedAt": "2025-05-02T08:35:30+01:00"
+      },
+      {
+        "Id": 3,
+        "CarWashStationId": 2,
+        "Name": "Interior Vacuum",
+        "DurationMinutes": 20,
+        "TokenValue": 4,
+        "Price": 8.50,
+        "ServiceType": "Interior",
+        "CommissionPercent": 8.0,
+        "CreatedAt": "2025-05-03T11:05:00+01:00"
+      },
+      {
+        "Id": 4,
+        "CarWashStationId": 3,
+        "Name": "Deluxe Wax & Polish",
+        "DurationMinutes": 75,
+        "TokenValue": 15,
+        "Price": 45.00,
+        "ServiceType": "Detailing",
+        "CommissionPercent": 15.0,
+        "CreatedAt": "2025-04-20T09:20:00+01:00"
+      }
+    ],
+
+    "StationImages": [
+      {
+        "Id": 1,
+        "StationId": 1,
+        "ImageUrl": "https://cdn.example.com/stations/1/front.jpg",
+        "CreatedAt": "2025-05-02T08:40:00+01:00"
+      },
+      {
+        "Id": 2,
+        "StationId": 2,
+        "ImageUrl": "https://cdn.example.com/stations/2/bays.jpg",
+        "CreatedAt": "2025-05-03T11:10:00+01:00"
+      },
+      {
+        "Id": 3,
+        "StationId": 3,
+        "ImageUrl": "https://cdn.example.com/stations/3/lounge.jpg",
+        "CreatedAt": "2025-04-20T09:25:00+01:00"
+      }
+    ],
+
+    "AppUsers": [
+      {
+        "Id": 1,
+        "FullName": "John Doe",
+        "Email": "john.doe@example.com",
+        "Location": "London",
+        "UserId": "7f144c2d-a3ac-4784-977b-19a7ca1b714b",
+        "CreatedAt": "2025-05-01T12:00:00+01:00"
+      },
+      {
+        "Id": 2,
+        "FullName": "Emma Brown",
+        "Email": "emma.brown@example.com",
+        "Location": "London",
+        "UserId": "8d2f365e-8ca9-4ae0-a1c9-9064d1b34fea",
+        "CreatedAt": "2025-05-02T14:15:00+01:00"
+      },
+      {
+        "Id": 3,
+        "FullName": "Carlos Garcia",
+        "Email": "carlos.garcia@example.com",
+        "Location": "Manchester",
+        "UserId": "5c3f2f41-4f3b-4a6f-a29c-2ffb165af840",
+        "CreatedAt": "2025-04-30T10:40:00+01:00"
+      }
+    ],
+
+    "Subscriptions": [
+      {
+        "Id": 1,
+        "AppUserId": 1,
+        "PlanName": "Gold",
+        "MonthlyFee": 19.99,
+        "NextPaymentDate": "2025-06-01",
+        "CreatedAt": "2025-05-01T12:05:00+01:00"
+      },
+      {
+        "Id": 2,
+        "AppUserId": 2,
+        "PlanName": "Silver",
+        "MonthlyFee": 9.99,
+        "NextPaymentDate": "2025-06-01",
+        "CreatedAt": "2025-05-01T12:05:00+01:00"
+      },
+      {
+        "Id": 3,
+        "AppUserId": 3,
+        "PlanName": "Basic",
+        "MonthlyFee": 5.99,
+        "NextPaymentDate": "2025-06-01",
+        "CreatedAt": "2025-05-01T12:05:00+01:00"
+      }
+    ],
+
+    "Vehicles": [
+      {
+        "Id": 1,
+        "AppUserId": 1,
+        "Make": "Ford",
+        "Model": "Fiesta",
+        "LicensePlate": "LD25 ABC",
+        "VehicleType": "Hatchback",
+        "PhotoUrl": "https://cdn.example.com/vehicles/fiesta.jpg"
+      },
+      {
+        "Id": 2,
+        "AppUserId": 1,
+        "Make": "Tesla",
+        "Model": "Model 3",
+        "LicensePlate": "EV25 ECO",
+        "VehicleType": "Sedan",
+        "PhotoUrl": "https://cdn.example.com/vehicles/tesla3.jpg"
+      },
+      {
+        "Id": 3,
+        "AppUserId": 2,
+        "Make": "BMW",
+        "Model": "3‑Series",
+        "LicensePlate": "LD25 BMW",
+        "VehicleType": "Sedan",
+        "PhotoUrl": "https://cdn.example.com/vehicles/bmw3.jpg"
+      },
+      {
+        "Id": 4,
+        "AppUserId": 3,
+        "Make": "Volkswagen",
+        "Model": "Golf",
+        "LicensePlate": "MN25 VW",
+        "VehicleType": "Hatchback",
+        "PhotoUrl": "https://cdn.example.com/vehicles/golf.jpg"
+      }
+    ],
+
+    "Tokens": [
+      {
+        "Id": 1,
+        "AppUserId": 1,
+        "Amount": 50,
+        "AcquiredAt": "2025-05-01T12:10:00+01:00",
+        "Source": "Welcome bonus"
+      },
+      {
+        "Id": 2,
+        "AppUserId": 2,
+        "Amount": 20,
+        "AcquiredAt": "2025-05-02T14:20:00+01:00",
+        "Source": "Referral"
+      },
+      {
+        "Id": 3,
+        "AppUserId": 3,
+        "Amount": 20,
+        "AcquiredAt": "2025-05-02T14:20:00+01:00",
+        "Source": "Referral"
+      }
+    ],
+
+    "Bookings": [
+      {
+        "Id": 1,
+        "UserId": 1,
+        "CarWashStationId": 1,
+        "VehicleId": 1,
+        "BookingDate": "2025-05-05",
+        "ArrivalTimeStart": "09:00:00",
+        "ArrivalTimeEnd": "09:30:00",
+        "TotalPrice": 30.00,
+        "Note": "Add tyre shine please",
+        "CreatedAt": "2025-05-04T18:00:00+01:00"
+      },
+      {
+        "Id": 2,
+        "UserId": 2,
+        "CarWashStationId": 2,
+        "VehicleId": 3,
+        "BookingDate": "2025-05-06",
+        "ArrivalTimeStart": "11:00:00",
+        "ArrivalTimeEnd": "11:30:00",
+        "TotalPrice": 8.50,
+        "Note": "",
+        "CreatedAt": "2025-05-05T15:45:00+01:00"
+      },
+      {
+        "Id": 3,
+        "UserId": 3,
+        "CarWashStationId": 3,
+        "VehicleId": 4,
+        "BookingDate": "2025-05-07",
+        "ArrivalTimeStart": "10:30:00",
+        "ArrivalTimeEnd": "11:45:00",
+        "TotalPrice": 45.00,
+        "Note": "First‑time customer discount applied",
+        "CreatedAt": "2025-05-06T09:00:00+01:00"
+      }
+    ],
+
+    "BookingServices": [
+      {
+        "BookingId": 1,
+        "ServiceId": 1
+      },
+      {
+        "BookingId": 1,
+        "ServiceId": 2
+      },
+      {
+        "BookingId": 2,
+        "ServiceId": 3
+      },
+      {
+        "BookingId": 3,
+        "ServiceId": 4
+      }
+    ],
+
+    "BookingCommissions": [
+      {
+        "Id": 1,
+        "BookingId": 1,
+        "CommissionPercent": 10.0,
+        "CommissionAmount": 3.00,
+        "PaidToAdmin": false,
+        "CreatedAt": "2025-05-05T09:35:00+01:00"
+      },
+      {
+        "Id": 2,
+        "BookingId": 2,
+        "CommissionPercent": 8.0,
+        "CommissionAmount": 0.68,
+        "PaidToAdmin": true,
+        "CreatedAt": "2025-05-06T11:40:00+01:00"
+      },
+      {
+        "Id": 3,
+        "BookingId": 3,
+        "CommissionPercent": 15.0,
+        "CommissionAmount": 6.75,
+        "PaidToAdmin": false,
+        "CreatedAt": "2025-05-07T11:50:00+01:00"
+      }
+    ],
+
+    "Reviews": [
+      {
+        "Id": 1,
+        "BookingId": 1,
+        "Rating": 5,
+        "Comment": "Great service, super quick!",
+        "CreatedAt": "2025-05-05T12:00:00+01:00"
+      },
+      {
+        "Id": 2,
+        "BookingId": 2,
+        "Rating": 4,
+        "Comment": "Great service, super quick!",
+        "CreatedAt": "2025-05-05T12:00:00+01:00"
+      }
+    ],
+
+    "ReviewPhotos": [
+      {
+        "Id": 1,
+        "ReviewId": 1,
+        "ImageUrl": "https://cdn.example.com/reviews/1/after.jpg"
+      },
+      {
+        "Id": 2,
+        "ReviewId": 2,
+        "ImageUrl": "https://cdn.example.com/reviews/1/after.jpg"
+      }
+    ],
+
+    "ActivityLogs": [
+      {
+        "Id": 1,
+        "AdminId": 1,
+        "ActionType": "CREATE_STATION",
+        "Message": "Station 'Clean Wheels Central' created",
+        "CreatedAt": "2025-05-02T08:45:00+01:00"
+      },
+      {
+        "Id": 2,
+        "AdminId": 1,
+        "ActionType": "APPROVE_REVIEW",
+        "Message": "Approved review #1",
+        "CreatedAt": "2025-05-05T12:05:00+01:00"
+      },
+      {
+        "Id": 3,
+        "AdminId": 2,
+        "ActionType": "UPDATE_SERVICE",
+        "Message": "Adjusted price of 'Deluxe Wax & Polish'",
+        "CreatedAt": "2025-04-21T10:00:00+01:00"
+      }
+    ]
+  }
+  
+}

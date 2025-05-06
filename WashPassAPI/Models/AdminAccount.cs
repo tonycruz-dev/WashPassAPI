@@ -8,7 +8,7 @@ public class AdminAccount
 
     public required string Email { get; set; }
 
-    public string? Location { get; }
+    public string? Location { get; set; }
 
     public string? Role { get; set; }
 
@@ -17,5 +17,6 @@ public class AdminAccount
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow.ToLocalTime();
 
     public List<CarWashStation> CarWashStations { get; set; } = [];
+    public List<ActivityLog> ActivityLogs { get; set; } = [];
 
 }

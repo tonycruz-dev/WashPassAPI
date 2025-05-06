@@ -19,6 +19,7 @@ namespace WashPassAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
@@ -36,6 +37,7 @@ namespace WashPassAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
                 },
@@ -88,6 +90,28 @@ namespace WashPassAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ActivityLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AdminId = table.Column<int>(type: "int", nullable: false),
+                    ActionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActivityLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ActivityLogs_AdminAccounts_AdminId",
+                        column: x => x.AdminId,
+                        principalTable: "AdminAccounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CarWashStations",
                 columns: table => new
                 {
@@ -111,6 +135,51 @@ namespace WashPassAPI.Migrations
                         name: "FK_CarWashStations_AdminAccounts_AdminId",
                         column: x => x.AdminId,
                         principalTable: "AdminAccounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subscriptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppUserId = table.Column<int>(type: "int", nullable: false),
+                    PlanName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MonthlyFee = table.Column<decimal>(type: "money", nullable: false),
+                    NextPaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscriptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_AppUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AppUserId = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    AcquiredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tokens_AppUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -332,7 +401,30 @@ namespace WashPassAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookingService",
+                name: "BookingCommissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
+                    CommissionPercent = table.Column<decimal>(type: "money", nullable: false),
+                    CommissionAmount = table.Column<decimal>(type: "money", nullable: false),
+                    PaidToAdmin = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookingCommissions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BookingCommissions_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookingServices",
                 columns: table => new
                 {
                     BookingId = table.Column<int>(type: "int", nullable: false),
@@ -340,18 +432,65 @@ namespace WashPassAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookingService", x => new { x.BookingId, x.ServiceId });
+                    table.PrimaryKey("PK_BookingServices", x => new { x.BookingId, x.ServiceId });
                     table.ForeignKey(
-                        name: "FK_BookingService_Bookings_BookingId",
+                        name: "FK_BookingServices_Bookings_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Bookings",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_BookingService_Services_ServiceId",
+                        name: "FK_BookingServices_Services_ServiceId",
                         column: x => x.ServiceId,
                         principalTable: "Services",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReviewPhotos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReviewId = table.Column<int>(type: "int", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReviewPhotos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReviewPhotos_Reviews_ReviewId",
+                        column: x => x.ReviewId,
+                        principalTable: "Reviews",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ActivityLogs_AdminId",
+                table: "ActivityLogs",
+                column: "AdminId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -393,6 +532,12 @@ namespace WashPassAPI.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookingCommissions_BookingId",
+                table: "BookingCommissions",
+                column: "BookingId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Bookings_CarWashStationId",
                 table: "Bookings",
                 column: "CarWashStationId");
@@ -408,14 +553,25 @@ namespace WashPassAPI.Migrations
                 column: "VehicleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookingService_ServiceId",
-                table: "BookingService",
+                name: "IX_BookingServices_ServiceId",
+                table: "BookingServices",
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CarWashStations_AdminId",
                 table: "CarWashStations",
                 column: "AdminId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReviewPhotos_ReviewId",
+                table: "ReviewPhotos",
+                column: "ReviewId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_BookingId",
+                table: "Reviews",
+                column: "BookingId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Services_CarWashStationId",
@@ -428,6 +584,17 @@ namespace WashPassAPI.Migrations
                 column: "StationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Subscriptions_AppUserId",
+                table: "Subscriptions",
+                column: "AppUserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tokens_AppUserId",
+                table: "Tokens",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_AppUserId",
                 table: "Vehicles",
                 column: "AppUserId");
@@ -436,6 +603,9 @@ namespace WashPassAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ActivityLogs");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -452,10 +622,22 @@ namespace WashPassAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BookingService");
+                name: "BookingCommissions");
+
+            migrationBuilder.DropTable(
+                name: "BookingServices");
+
+            migrationBuilder.DropTable(
+                name: "ReviewPhotos");
 
             migrationBuilder.DropTable(
                 name: "StationImages");
+
+            migrationBuilder.DropTable(
+                name: "Subscriptions");
+
+            migrationBuilder.DropTable(
+                name: "Tokens");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -464,22 +646,25 @@ namespace WashPassAPI.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Bookings");
-
-            migrationBuilder.DropTable(
                 name: "Services");
 
             migrationBuilder.DropTable(
-                name: "Vehicles");
+                name: "Reviews");
+
+            migrationBuilder.DropTable(
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "CarWashStations");
 
             migrationBuilder.DropTable(
-                name: "AppUsers");
+                name: "Vehicles");
 
             migrationBuilder.DropTable(
                 name: "AdminAccounts");
+
+            migrationBuilder.DropTable(
+                name: "AppUsers");
         }
     }
 }
